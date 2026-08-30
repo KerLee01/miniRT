@@ -1,4 +1,4 @@
-#include "main.h"
+#include "rt_math.h"
 
 double magnitude(t_coor vector)
 {

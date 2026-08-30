@@ -1,4 +1,4 @@
-#include "main.h"
+#include "rt_math.h"
 
 t_coor addition(t_coor a, t_coor b)
 {

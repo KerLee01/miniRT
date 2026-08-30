@@ -1,4 +1,4 @@
-#include "main.h"
+#include "rt_math.h"
 
 t_coor create_new_coor(double x, double y, double z)
 {

@@ -1,5 +1,7 @@
-#ifndef MATH_H
-#define MATH_H
+#ifndef RT_MATH_H
+#define RT_MATH_H
+
+#include <math.h>
 
 typedef struct s_coor {
    double x;
