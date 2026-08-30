@@ -7,28 +7,30 @@ CFLAGS = -Wall -Wextra -Werror
 MLX_DIR = ./mlx
 MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 
+INCLUDES = -I./includes -I$(MLX_DIR)
+
 MATH_FLAGS = -lm
 
-SRCS = main.c \
-       mlx.c \
-       render.c \
-       sphere.c \
-       math/adv_arith.c \
-       math/basic_arith.c \
-       math/helper_funcs.c \
-       camera/camera.c \
-       camera/ray.c \
-       camera/viewport.c
+SRCS = srcs/main.c \
+       srcs/mlx.c \
+       srcs/render.c \
+       srcs/sphere.c \
+       srcs/math/adv_arith.c \
+       srcs/math/basic_arith.c \
+       srcs/math/helper_funcs.c \
+       srcs/camera/camera.c \
+       srcs/camera/ray.c \
+       srcs/camera/viewport.c
 
 OBJS = $(SRCS:.c=.o)
 
 all: $(NAME)
 
 $(NAME): $(OBJS)
-	$(CC) $(CFLAGS) $(OBJS) $(MLX_FLAGS) $(MATH_FLAGS) -o $(NAME)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(MLX_FLAGS) $(MATH_FLAGS) -o $(NAME)
 
 %.o: %.c
-	$(CC) $(CFLAGS) -I$(MLX_DIR) -c $< -o $@
+	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
 clean:
 	rm -f $(OBJS)

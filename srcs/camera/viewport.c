@@ -30,9 +30,9 @@ void calculate_viewport(t_camera *cam)
 	cam->viewport_height = cam->viewport_width / aspect_ratio; 
 	
 	cam->viewport_u = multiply(cam->right, cam->viewport_width);
-	cam->viewport_v = multiply(cam->true_up, ((-)cam->viewport_height));
+	cam->viewport_v = multiply(cam->true_up, -cam->viewport_height);
 
 	cam->pixel_delta_u = divide(cam->viewport_u, WIN_WIDTH);
-	cam->pixel_delat_v = divide(cam->viewport_v, WIN_HEIGHT);
+	cam->pixel_delta_v = divide(cam->viewport_v, WIN_HEIGHT);
 	find_pixel_00(cam);
 }

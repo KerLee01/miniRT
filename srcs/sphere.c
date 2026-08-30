@@ -1,6 +1,6 @@
  #include "rt.h"
 
-int hit_sphere(t_sphere *sphere, t_ray *ray)
+double hit_sphere(t_sphere *sphere, t_ray *ray)
 {
 	t_coor oc;
 	double a;
@@ -16,7 +16,11 @@ int hit_sphere(t_sphere *sphere, t_ray *ray)
 
 	discriminant  = (b * b) - (4.0 * a * c);
 	if(discriminant < 0.0)
-		return (0);
+		return (-1.0);
+	if((-b - sqrt(discriminant)) / (2.0 * a) > 0.0)
+		return ((-b - sqrt(discriminant)) / (2.0 * a));
+	if((-b + sqrt(discriminant)) / (2.0 * a) > 0.0)
+		return ((-b + sqrt(discriminant)) / (2.0 * a));
 
-	return (1);
+	return (1.0);
 }

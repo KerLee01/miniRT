@@ -1,4 +1,5 @@
 #include "rt.h"
+#include "mlx.h"
 #include <stdlib.h>
 
 int main(void)
@@ -16,7 +17,6 @@ int main(void)
     find_right_axis(&cam);
     find_true_up(&cam);
     calculate_viewport(&cam); 
-    // (Assuming calculate_viewport calls find_pixel_00 internally!)
 
     // 2. HARDCODE THE SPHERE (Placed 10 units away, directly in front of camera)
     sphere.center = create_new_coor(0, 0, 10.0);

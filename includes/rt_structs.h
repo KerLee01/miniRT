@@ -15,6 +15,7 @@ typedef struct s_camera
    double fov;
    t_coor right;
    t_coor true_up;
+   t_coor world_up;
 
    double viewport_width;
    double viewport_height;
@@ -24,6 +25,15 @@ typedef struct s_camera
    t_coor pixel_delta_v;
    t_coor pixel_00_loc;
 } t_camera;
+
+typedef struct s_sphere
+{
+    t_coor  center;
+    double  radius;
+    int     r;
+    int     g;
+    int     b;
+} t_sphere;
 
 typedef struct s_data 
 {
@@ -38,14 +48,5 @@ typedef struct s_data
     t_camera *cam;
     t_sphere *sphere; 
 } t_data;
-
-typedef struct s_sphere
-{
-    t_coor  center;
-    double  radius;
-    int     r;
-    int     g;
-    int     b;
-} t_sphere;
 
 #endif
