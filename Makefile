@@ -20,7 +20,9 @@ SRCS = srcs/main.c \
        srcs/math/helper_funcs.c \
        srcs/camera/camera.c \
        srcs/camera/ray.c \
-       srcs/camera/viewport.c
+       srcs/camera/viewport.c \
+       src/parser/utils/get_next_line.c \
+       src/parser/utils/get_next_line_utils.c
 
 OBJS = $(SRCS:.c=.o)
 

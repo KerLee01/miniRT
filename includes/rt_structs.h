@@ -35,6 +35,20 @@ typedef struct s_sphere
     int     b;
 } t_sphere;
 
+typedef enum e_shape_type
+{
+   SPHERE,
+   PLANE, 
+   CYLINDER
+} t_shape_type;
+
+typedef struct s_shape
+{
+   t_shape_type type;
+   void *data;
+   struct s_shape *next;
+} t_shape;
+
 typedef struct s_data 
 {
     void    *mlx;
@@ -46,7 +60,7 @@ typedef struct s_data
     int     endian;
     
     t_camera *cam;
-    t_sphere *sphere; 
+    t_shape *shape;
 } t_data;
 
 #endif
