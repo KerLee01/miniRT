@@ -7,10 +7,14 @@
 #include <strings.h>
 #include <unistd.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 
+#include "libft.h"
 #include "rt_math.h"
 #include "rt_structs.h"
+
+#include "parser.h"
 
 // camera
 void gimbal_lock_check(t_camera *cam);

@@ -1,5 +1,5 @@
 #include "rt.h"
-#include "mlx.h"
+//#include "mlx.h"
 #include <stdlib.h>
 
 void debug_print_scene(t_data *data)
@@ -37,14 +37,16 @@ void debug_print_scene(t_data *data)
 int main(int argc, char **argv)
 {
     t_data data;
+    int i;
 
     // 1. Check for exactly one argument (the .rt file)
     if (argc != 2)
     {
-        write(2, "Error\nUsage: ./miniRT <scene.rt>\n", 33);
+        i = write(2, "Error\nUsage: ./miniRT <scene.rt>\n", 33);
+	(void)i;
         return (1);
     }
-
+    ft_bzero(&data, sizeof(t_data));
     // 2. Parse the scene. 
     // (If anything goes wrong, this function will automatically free memory and exit)
     parse_scene(argv[1], &data);

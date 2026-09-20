@@ -9,7 +9,7 @@ static int check_valid_rt(char *file)
 	len = ft_strlen(file);
 	if(len < 4)
 		return (0);
-	if(file[len - 3] == '.' && file[len - 2] == "r" && file[len - 4] == "t")
+	if(!(file[len - 3] == '.' && file[len - 2] == 'r' && file[len - 1] == 't'))
 		return (1);
 	return (0);
 }
@@ -35,10 +35,10 @@ int find_and_fill_element(char *line, t_data *data)
 	int i;
 
 	i = 0;
-	while(line[i] == ' )
+	while(line[i] == ' ')
 		i++;
-	if(line[i] == '\n')
-		return(1);
+	if(line[i] == '\n' || line[i] == '\0')
+		return (0);
 	if(ft_strncmp(&line[i], "A", 1) == 0)
 		fill_ambient(&line[i], data);
 	else if(ft_strncmp(&line[i], "C", 1) == 0)
@@ -61,19 +61,18 @@ void parse_scene(char *file, t_data *data)
 	int fd;
 	char *line;
 
-	if(check_valid_rt(file) == 0)
-		print_error();
+	if(check_valid_rt(file) != 0)
+		print_error(data);
 	fd = open(file, O_RDONLY);
 	if(fd < 0)
-		print_error();
-	ft_bzero(data, sizeof(t_data));
+		print_error(data);
 	line = get_next_line(fd);
 	while(line != NULL)
 	{
 		if(line[0] != '\n')
 		{
 			if(find_and_fill_element(line, data) == 1)
-				print_error();
+				print_error(data);
 		}
 		free(line);
 		line = get_next_line(fd);

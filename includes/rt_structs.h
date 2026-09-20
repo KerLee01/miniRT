@@ -3,13 +3,37 @@
 
 #include "rt_math.h"
 
-typedef struct s_ray {
+typedef struct s_ray 
+{
     t_coor origin;
     t_coor direction;
 } t_ray;
 
+typedef struct s_rgb
+{
+   int r;
+   int g;
+   int b;
+} t_rgb;
+
+typedef struct s_ambient
+{
+   int filled;
+   double ratio;
+   t_rgb rgb;
+} t_ambient;
+
+typedef struct s_light
+{
+   int filled;
+   t_coor position;
+   double bright_ratio;
+   t_rgb rgb;
+} t_light;
+
 typedef struct s_camera
 {
+   int filled;
    t_coor origin;
    t_coor forward;
    double fov;
@@ -30,10 +54,24 @@ typedef struct s_sphere
 {
     t_coor  center;
     double  radius;
-    int     r;
-    int     g;
-    int     b;
+    t_rgb rgb;
 } t_sphere;
+
+typedef struct s_plane
+{
+   t_coor point;
+   t_coor forward;
+   t_rgb rgb;
+} t_plane;
+
+typedef struct s_cylinder
+{
+   t_coor center;
+   t_coor forward;
+   double radius;
+   double height;
+   t_rgb rgb;
+} t_cylinder;
 
 typedef enum e_shape_type
 {
@@ -59,7 +97,9 @@ typedef struct s_data
     int     line_length;
     int     endian;
     
-    t_camera *cam;
+    t_camera cam;
+    t_light light;
+    t_ambient ambient;
     t_shape *shape;
 } t_data;
 

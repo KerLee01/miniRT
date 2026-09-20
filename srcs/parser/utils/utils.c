@@ -19,8 +19,11 @@ void clear_malloc(t_data *data)
 
 void print_error(t_data *data)
 {
+	int i;
+
 	clear_malloc(data);
-	write(2, "Error\n", 6);
+	i = write(2, "Error\n", 6);
+	(void)i;
 	exit(1);
 }
 
@@ -61,7 +64,8 @@ double ft_atof(char *str)
 	while(*str >= '0' && *str <= '9')
 	{
 		decimal_inc *= 10.0;
-		value += ((*str)++ - '0') / decimal_inc;
+		value += (*str - '0') / decimal_inc;
+		str++;
 	}
 	return (value * negative);
 }

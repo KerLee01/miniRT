@@ -1,6 +1,7 @@
 #include "rt.h"
-#include "mlx.h"
+//#include "mlx.h"
 
+/*
 void render_scene(t_data *data)
 {
    	t_shape *current;
@@ -22,3 +23,4 @@ void render_scene(t_data *data)
 
     mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 }
+*/
