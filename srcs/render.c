@@ -2,7 +2,9 @@
 #include "mlx.h"
 
 int get_color_int(t_rgb rgb)
+{
 	return ((rgb.r << 16) | (rgb.g << 8) | rgb.b);
+}
 
 void render_scene(t_data *data)
 {
