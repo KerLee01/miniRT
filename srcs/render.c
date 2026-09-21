@@ -37,6 +37,15 @@ void render_scene(t_data *data)
 						pixel_color = get_color_int(((t_sphere *)current->data)->rgb);
 					}
 				}
+				else if (current->type == PLANE)
+				{
+				    t = hit_plane((t_plane *)current->data, &ray);
+				    if (t > 0.0 && t < closest_t)
+				    {
+					closest_t = t;
+					pixel_color = get_color_int(((t_plane *)current->data)->rgb);
+				    }
+				}
 				current = current->next;
 			}
 			my_mlx_pixel_put(data, x, y, pixel_color);

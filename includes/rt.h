@@ -33,4 +33,7 @@ void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 // sphere.c
 double hit_sphere(t_sphere *sphere, t_ray *ray);
 
+// plane.c
+double hit_plane(t_plane *plane, t_ray *ray);
+
 #endif
