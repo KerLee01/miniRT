@@ -46,6 +46,15 @@ void render_scene(t_data *data)
 					pixel_color = get_color_int(((t_plane *)current->data)->rgb);
 				    }
 				}
+				else if (current->type == CYLINDER)
+				{
+				    t = hit_cylinder((t_cylinder *)current->data, &ray);
+				    if (t > 0.0 && t < closest_t)
+				    {
+					closest_t = t;
+					pixel_color = get_color_int(((t_cylinder *)current->data)->rgb);
+				    }
+				}
 				current = current->next;
 			}
 			my_mlx_pixel_put(data, x, y, pixel_color);

@@ -36,4 +36,7 @@ double hit_sphere(t_sphere *sphere, t_ray *ray);
 // plane.c
 double hit_plane(t_plane *plane, t_ray *ray);
 
+// cylinder.c
+double hit_cylinder(t_cylinder *cy, t_ray *ray);
+
 #endif

@@ -7,7 +7,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
 MLX_DIR = ./mlx
-MLX_FLAGS =
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
 
 INCLUDES = -I./includes -I$(MLX_DIR) -I$(LIBFT_DIR)
 
@@ -17,6 +17,8 @@ SRCS = srcs/main.c \
        srcs/mlx.c \
        srcs/render.c \
        srcs/sphere.c \
+       srcs/plane.c \
+       srcs/cylinder.c \
        srcs/math/adv_arith.c \
        srcs/math/basic_arith.c \
        srcs/math/helper_funcs.c \
