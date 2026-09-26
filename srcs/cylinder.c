@@ -9,7 +9,7 @@ double	check_cylinder_bounds(t_cylinder *cy, t_ray *ray, double t)
 	hit_point = addition(ray->origin, multiply(ray->direction, t));
 	v = subtract(hit_point, cy->center);
 	hit_height = dot_product(v, cy->forward);
-	if (hit_height >= 0.0 && hit_height <= cy->height)
+	if (hit_height >= -EPSILON && hit_height <= cy->height + EPSILON)
 		return (t);
 	return (-1.0);
 }
@@ -24,11 +24,11 @@ double	hit_cap(t_cylinder *cy, t_ray *ray, t_coor center, t_coor normal)
 	plane.point = center;
 	plane.forward = normal;
 	t = hit_plane(&plane, ray);
-	if (t < 0.0)
+	if (t < EPSILON)
 		return (-1.0);
 	hit_point = addition(ray->origin, multiply(ray->direction, t));
 	v = subtract(hit_point, center);
-	if (dot_product(v, v) <= (cy->radius * cy->radius))
+	if (dot_product(v, v) <= (cy->radius * cy->radius) + EPSILON)
 		return (t);
 	return (-1.0);
 }
@@ -56,10 +56,10 @@ double	hit_cylinder_body(t_cylinder *cy, t_ray *ray, double *closest)
 	t_vals[0] = (-abc[1] - sqrt(disc)) / (2.0 * abc[0]);
 	t_vals[1] = (-abc[1] + sqrt(disc)) / (2.0 * abc[0]);
 	disc = check_cylinder_bounds(cy, ray, t_vals[0]);
-	if (disc > 0.001 && disc < *closest)
+	if (disc > EPSILON && disc < *closest)
 		*closest = disc;
 	disc = check_cylinder_bounds(cy, ray, t_vals[1]);
-	if (disc > 0.001 && disc < *closest)
+	if (disc > EPSILON && disc < *closest)
 		*closest = disc;
 	return (*closest);
 }

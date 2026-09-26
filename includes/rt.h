@@ -4,6 +4,8 @@
 #define WIN_WIDTH 800
 #define WIN_HEIGHT 600
 
+#define EPSILON 1e-4
+
 #include <strings.h>
 #include <unistd.h>
 #include <stdio.h>

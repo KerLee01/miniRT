@@ -9,7 +9,7 @@ double hit_plane(t_plane *plane, t_ray *ray)
 
     denominator = dot_product(ray->direction, plane->forward);
 
-    if (fabs(denominator) < 1e-6)
+    if (fabs(denominator) < EPSILON)
         return (-1.0);
 
     p0_minus_origin = subtract(plane->point, ray->origin);
