@@ -27,18 +27,30 @@ void find_pixel_00(t_camera *cam);
 void calculate_viewport(t_camera *cam);
 
 t_ray generate_ray(t_camera *cam, int x, int y);
+
+// render.c
 void render_scene(t_data *data);
+t_rgb get_base_color(t_shape *shape);
+t_coor get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray);
 
 // mlx.c
 void my_mlx_pixel_put(t_data *data, int x, int y, int color);
 
 // sphere.c
 double hit_sphere(t_sphere *sphere, t_ray *ray);
+t_coor get_sphere_normal(t_sphere *sp, t_coor hit_point)
 
 // plane.c
 double hit_plane(t_plane *plane, t_ray *ray);
+t_coor get_plane_normal(t_plane *pl, t_ray *ray);
 
 // cylinder.c
 double hit_cylinder(t_cylinder *cy, t_ray *ray);
+t_coor get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray);
+
+// lambertian.c
+double calculate_diffuse(t_data *data, t_coor hit_point, t_coor normal);
+t_coor get_normal(t_shape *shape, t_coor hit_point, t_ray *ray);
+int calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit_point);
 
 #endif

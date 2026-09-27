@@ -83,3 +83,26 @@ double	hit_cylinder(t_cylinder *cy, t_ray *ray)
 		return (closest_t);
 	return (-1.0);
 }
+
+t_coor get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray)
+{
+	t_coor	v;
+	double	proj;
+	t_coor	n;
+	t_coor	center_hit;
+
+	v = subtract(hit_point, cy->center);
+	proj = dot_product(v, cy->forward);
+	if (proj < 0.001)
+		n = multiply(cy->forward, -1.0);
+	else if (fabs(proj - cy->height) < 0.001)
+		n = cy->forward;
+	else
+	{
+		center_hit = addition(cy->center, multiply(cy->forward, proj));
+		n = normalization(subtract(hit_point, center_hit));
+	}
+	if (dot_product(ray->direction, n) > 0.0)
+		n = multiply(n, -1.0);
+	return (n);
+}
