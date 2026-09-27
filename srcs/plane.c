@@ -22,3 +22,10 @@ double hit_plane(t_plane *plane, t_ray *ray)
 
     return (-1.0);
 }
+
+t_coor get_plane_normal(t_plane *pl, t_ray *ray)
+{
+    if (dot_product(ray->direction, pl->forward) > 0.0)
+        return (multiply(pl->forward, -1.0));
+    return (pl->forward);
+}

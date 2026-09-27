@@ -19,7 +19,8 @@ SRCS = srcs/main.c \
        srcs/sphere.c \
        srcs/plane.c \
        srcs/cylinder.c \
-       srcs/lambertian.c \
+       srcs/lighting.c \
+       srcs/shadow.c \
        srcs/math/adv_arith.c \
        srcs/math/basic_arith.c \
        srcs/math/helper_funcs.c \

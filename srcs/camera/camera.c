@@ -10,7 +10,7 @@ void gimbal_lock_check(t_camera *cam)
 
 void find_right_axis(t_camera *cam)
 {
-	cam->right = cross_product(cam->forward, cam->world_up);
+	cam->right = cross_product(cam->world_up, cam->forward);
 	cam->right = normalization(cam->right);
 }
 
