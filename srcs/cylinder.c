@@ -40,27 +40,24 @@ double	hit_cylinder_body(t_cylinder *cy, t_ray *ray, double *closest)
 	t_coor	oc_p;
 	double	abc[3];
 	double	disc;
-	double	t_vals[2];
+	double	t;
 
 	oc = subtract(ray->origin, cy->center);
-	abc[0] = dot_product(ray->direction, cy->forward);
-	abc[1] = dot_product(oc, cy->forward);
-	d_p = subtract(ray->direction, multiply(cy->forward, abc[0]));
-	oc_p = subtract(oc, multiply(cy->forward, abc[1]));
+	d_p = subtract(ray->direction, multiply(cy->forward,
+				dot_product(ray->direction, cy->forward)));
+	oc_p = subtract(oc, multiply(cy->forward, dot_product(oc, cy->forward)));
 	abc[0] = dot_product(d_p, d_p);
 	abc[1] = 2.0 * dot_product(d_p, oc_p);
 	abc[2] = dot_product(oc_p, oc_p) - (cy->radius * cy->radius);
 	disc = (abc[1] * abc[1]) - (4.0 * abc[0] * abc[2]);
 	if (disc < 0.0 || fabs(abc[0]) <= 1e-6)
 		return (*closest);
-	t_vals[0] = (-abc[1] - sqrt(disc)) / (2.0 * abc[0]);
-	t_vals[1] = (-abc[1] + sqrt(disc)) / (2.0 * abc[0]);
-	disc = check_cylinder_bounds(cy, ray, t_vals[0]);
-	if (disc > EPSILON && disc < *closest)
-		*closest = disc;
-	disc = check_cylinder_bounds(cy, ray, t_vals[1]);
-	if (disc > EPSILON && disc < *closest)
-		*closest = disc;
+	t = check_cylinder_bounds(cy, ray, (-abc[1] - sqrt(disc)) / (2.0 * abc[0]));
+	if (t > EPSILON && t < *closest)
+		*closest = t;
+	t = check_cylinder_bounds(cy, ray, (-abc[1] + sqrt(disc)) / (2.0 * abc[0]));
+	if (t > EPSILON && t < *closest)
+		*closest = t;
 	return (*closest);
 }
 
@@ -84,7 +81,7 @@ double	hit_cylinder(t_cylinder *cy, t_ray *ray)
 	return (-1.0);
 }
 
-t_coor get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray)
+t_coor	get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray)
 {
 	t_coor	v;
 	double	proj;

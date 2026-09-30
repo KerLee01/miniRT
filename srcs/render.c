@@ -1,7 +1,7 @@
 #include "rt.h"
 #include "mlx.h"
 
-t_rgb get_base_color(t_shape *shape)
+t_rgb	get_base_color(t_shape *shape)
 {
 	if (shape->type == SPHERE)
 		return (((t_sphere *)shape->data)->rgb);
@@ -10,7 +10,7 @@ t_rgb get_base_color(t_shape *shape)
 	return (((t_cylinder *)shape->data)->rgb);
 }
 
-int get_color_int(t_rgb rgb)
+int	get_color_int(t_rgb rgb)
 {
 	return ((rgb.r << 16) | (rgb.g << 8) | rgb.b);
 }
@@ -42,13 +42,31 @@ t_shape	*get_closest_shape(t_shape *shapes, t_ray *ray, double *closest_t)
 	return (closest_shape);
 }
 
-void	render_scene(t_data *data)
+static void	render_pixel(t_data *data, int x, int y)
 {
-	int		x;
-	int		y;
 	t_ray	ray;
 	double	closest_t;
 	t_shape	*closest_shape;
+	t_coor	hit_point;
+	int		color;
+
+	ray = generate_ray(&data->cam, x, y);
+	closest_t = 1e30;
+	closest_shape = get_closest_shape(data->shape, &ray, &closest_t);
+	if (closest_shape != NULL)
+	{
+		hit_point = addition(ray.origin, multiply(ray.direction, closest_t));
+		color = calculate_lighting(data, closest_shape, &ray, hit_point);
+		my_mlx_pixel_put(data, x, y, color);
+	}
+	else
+		my_mlx_pixel_put(data, x, y, 0x000000);
+}
+
+void	render_scene(t_data *data)
+{
+	int	x;
+	int	y;
 
 	y = 0;
 	while (y < WIN_HEIGHT)
@@ -56,15 +74,7 @@ void	render_scene(t_data *data)
 		x = 0;
 		while (x < WIN_WIDTH)
 		{
-			ray = generate_ray(&data->cam, x, y);
-			closest_t = 1e30;
-			closest_shape = get_closest_shape(data->shape, &ray, &closest_t);
-			if (closest_shape != NULL)
-				my_mlx_pixel_put(data, x, y, calculate_lighting(data,
-						closest_shape, &ray, addition(ray.origin,
-							multiply(ray.direction, closest_t))));
-			else
-				my_mlx_pixel_put(data, x, y, 0x000000);
+			render_pixel(data, x, y);
 			x++;
 		}
 		y++;

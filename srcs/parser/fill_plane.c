@@ -1,18 +1,18 @@
 #include "rt.h"
 
-static void fill_data_attach_node(t_data *data, char **tokens)
+static void	fill_data_attach_node(t_data *data, char **tokens)
 {
-	t_shape *plane;
-	t_plane *plane_data;
+	t_shape	*plane;
+	t_plane	*plane_data;
 
 	plane = malloc(sizeof(t_shape));
-	if(!plane)
+	if (!plane)
 	{
 		clear_split(tokens);
 		print_error(data);
 	}
 	plane_data = malloc(sizeof(t_plane));
-	if(!plane_data)
+	if (!plane_data)
 	{
 		free(plane);
 		clear_split(tokens);
@@ -22,30 +22,31 @@ static void fill_data_attach_node(t_data *data, char **tokens)
 	plane->data = plane_data;
 	split_coor(&plane_data->point, tokens[1], tokens, data);
 	split_coor(&plane_data->forward, tokens[2], tokens, data);
-	if(check_normalized_vector(plane_data->forward) == 0)
+	if (check_normalized_vector(plane_data->forward) == 0)
 	{
 		free(plane_data);
 		free(plane);
 		clear_split(tokens);
 		print_error(data);
 	}
+	plane_data->forward = normalization(plane_data->forward);
 	split_rgb(&plane_data->rgb, tokens[3], tokens, data);
 	plane->next = NULL;
 	insert_next_shape(data, plane);
 }
 
-void fill_plane(char *line, t_data *data)
+void	fill_plane(char *line, t_data *data)
 {
-	int i;
-	char **tokens;
+	int		i;
+	char	**tokens;
 
 	i = 0;
 	tokens = ft_split(line, ' ');
-	if(!tokens)
+	if (!tokens)
 		print_error(data);
-	while(tokens[i] != NULL)
+	while (tokens[i] != NULL)
 		i++;
-	if(i != 4)
+	if (i != 4)
 	{
 		clear_split(tokens);
 		print_error(data);

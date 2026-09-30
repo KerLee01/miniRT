@@ -2,83 +2,98 @@
 #include "get_next_line.h"
 #include "fcntl.h"
 
-static int check_valid_rt(char *file)
+static int	check_valid_rt(char *file)
 {
-	int len;
+	int	len;
 
 	len = ft_strlen(file);
-	if(len < 4)
-		return (0);
-	if(!(file[len - 3] == '.' && file[len - 2] == 'r' && file[len - 1] == 't'))
+	if (len < 4)
+		return (1);
+	if (ft_strncmp(file + len - 3, ".rt", 3) != 0)
 		return (1);
 	return (0);
 }
 
-void insert_next_shape(t_data *data, t_shape *shape)
+static void	sanitize_line(char *line)
 {
-	t_shape *current;
+	int	i;
 
-	if(data->shape == NULL)
+	i = 0;
+	while (line[i])
+	{
+		if (line[i] == '\t' || line[i] == '\r' || line[i] == '\n'
+			|| line[i] == '\v' || line[i] == '\f')
+			line[i] = ' ';
+		i++;
+	}
+}
+
+void	insert_next_shape(t_data *data, t_shape *shape)
+{
+	t_shape	*current;
+
+	if (data->shape == NULL)
 	{
 		data->shape = shape;
-		return;
+		return ;
 	}
-
 	current = data->shape;
-	while(current->next != NULL)
+	while (current->next != NULL)
 		current = current->next;
 	current->next = shape;
 }
 
-int find_and_fill_element(char *line, t_data *data)
+int	find_and_fill_element(char *line, t_data *data)
 {
-	int i;
+	int	i;
 
 	i = 0;
-	while(line[i] == ' ')
+	while (line[i] == ' ')
 		i++;
-	if(line[i] == '\n' || line[i] == '\0')
+	if (line[i] == '\0')
 		return (0);
-	if(ft_strncmp(&line[i], "A", 1) == 0)
+	if (ft_strncmp(&line[i], "A ", 2) == 0)
 		fill_ambient(&line[i], data);
-	else if(ft_strncmp(&line[i], "C", 1) == 0)
+	else if (ft_strncmp(&line[i], "C ", 2) == 0)
 		fill_camera(&line[i], data);
-	else if(ft_strncmp(&line[i], "L", 1) == 0)
+	else if (ft_strncmp(&line[i], "L ", 2) == 0)
 		fill_light(&line[i], data);
-	else if(ft_strncmp(&line[i], "sp", 2) == 0)
+	else if (ft_strncmp(&line[i], "sp ", 3) == 0)
 		fill_sphere(&line[i], data);
-	else if(ft_strncmp(&line[i], "pl", 2) == 0)
+	else if (ft_strncmp(&line[i], "pl ", 3) == 0)
 		fill_plane(&line[i], data);
-	else if(ft_strncmp(&line[i], "cy", 2) == 0)
+	else if (ft_strncmp(&line[i], "cy ", 3) == 0)
 		fill_cylinder(&line[i], data);
 	else
 		return (1);
 	return (0);
 }
 
-void parse_scene(char *file, t_data *data)
+void	parse_scene(char *file, t_data *data)
 {
-	int fd;
-	char *line;
+	int		fd;
+	char	*line;
 
-	if(check_valid_rt(file) != 0)
+	if (check_valid_rt(file) != 0)
 		print_error(data);
 	fd = open(file, O_RDONLY);
-	if(fd < 0)
+	if (fd < 0)
 		print_error(data);
 	line = get_next_line(fd);
-	while(line != NULL)
+	while (line != NULL)
 	{
-		if(line[0] != '\n')
+		sanitize_line(line);
+		if (find_and_fill_element(line, data) == 1)
 		{
-			if(find_and_fill_element(line, data) == 1)
-				print_error(data);
+			free(line);
+			close(fd);
+			print_error(data);
 		}
 		free(line);
 		line = get_next_line(fd);
 	}
-	if(data->cam.filled == 0 || data->ambient.filled == 0 || data->light.filled == 0)
-		print_error(data);
 	close(fd);
+	if (data->cam.filled == 0 || data->ambient.filled == 0
+		|| data->light.filled == 0)
+		print_error(data);
 }
-

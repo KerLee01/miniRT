@@ -40,7 +40,7 @@ int expose_hook(t_data *data);
 
 // sphere.c
 double hit_sphere(t_sphere *sphere, t_ray *ray);
-t_coor get_sphere_normal(t_sphere *sp, t_coor hit_point);
+t_coor get_sphere_normal(t_sphere *sp, t_coor hit_point, t_ray *ray);
 
 // plane.c
 double hit_plane(t_plane *plane, t_ray *ray);
@@ -53,7 +53,8 @@ t_coor get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray);
 // lighting.c
 double calculate_diffuse(t_data *data, t_coor hit_point, t_coor normal);
 t_coor get_normal(t_shape *shape, t_coor hit_point, t_ray *ray);
-int calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit_point);
+int calculate_lighting(t_data *data, t_shape *shape, t_ray *ray,
+		t_coor hit_point);
 
 // shadow.c
 int	in_shadow(t_data *data, t_coor hit_point, t_coor light_dir);

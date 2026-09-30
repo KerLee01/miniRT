@@ -3,7 +3,7 @@ NAME = miniRT
 LIBFT_DIR = libft
 LIBFT = $(LIBFT_DIR)/libft.a
 
-CC = gcc
+CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 MLX_DIR = ./mlx
@@ -34,7 +34,8 @@ SRCS = srcs/main.c \
        srcs/parser/fill_cylinder.c \
        srcs/parser/utils/get_next_line.c \
        srcs/parser/utils/get_next_line_utils.c \
-       srcs/parser/utils/utils.c
+       srcs/parser/utils/utils.c \
+       srcs/parser/utils/parse_helpers.c
 
 OBJS = $(SRCS:.c=.o)
 
@@ -49,6 +50,8 @@ $(LIBFT):
 %.o: %.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
 
+bonus: all
+
 clean:
 	rm -f $(OBJS)
 	make -C $(LIBFT_DIR) clean
@@ -59,4 +62,4 @@ fclean: clean
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re bonus

@@ -2,44 +2,48 @@
 #include "mlx.h"
 #include <stdlib.h>
 
-int close_window(t_data *data)
+int	close_window(t_data *data)
 {
-    clear_malloc(data);
-    mlx_destroy_window(data->mlx, data->win);
-    exit(0);
-    return (0);
+	clear_malloc(data);
+	if (data->img)
+		mlx_destroy_image(data->mlx, data->img);
+	if (data->win)
+		mlx_destroy_window(data->mlx, data->win);
+	exit(0);
+	return (0);
 }
 
-int key_hook(int keycode, t_data *data)
+int	key_hook(int keycode, t_data *data)
 {
-    if (keycode == 53)
-        close_window(data);
-    return (0);
+	if (keycode == 53)
+		close_window(data);
+	return (0);
 }
 
-int main(int argc, char **argv)
+int	main(int argc, char **argv)
 {
-    t_data data;
+	t_data	data;
 
-    ft_bzero(&data, sizeof(t_data));
-    if (argc != 2)
-    {
-        write(2, "Error\nUsage: ./miniRT <scene.rt>\n", 33);
-        return (1);
-    }
-    parse_scene(argv[1], &data);
-    gimbal_lock_check(&data.cam);
-    find_right_axis(&data.cam);
-    find_true_up(&data.cam);
-    calculate_viewport(&data.cam);
-    data.mlx = mlx_init();
-    data.win = mlx_new_window(data.mlx, WIN_WIDTH, WIN_HEIGHT, "miniRT");
-    data.img = mlx_new_image(data.mlx, WIN_WIDTH, WIN_HEIGHT);
-    data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel, &data.line_length, &data.endian);
-    render_scene(&data);
-    mlx_hook(data.win, 17, 0, close_window, &data);
-    mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
-    mlx_hook(data.win, 12, 1L<<15, expose_hook, &data);
-    mlx_loop(data.mlx);
-    return (0);
+	ft_bzero(&data, sizeof(t_data));
+	if (argc != 2)
+	{
+		write(2, "Error\nUsage: ./miniRT <scene.rt>\n", 33);
+		return (1);
+	}
+	parse_scene(argv[1], &data);
+	gimbal_lock_check(&data.cam);
+	find_right_axis(&data.cam);
+	find_true_up(&data.cam);
+	calculate_viewport(&data.cam);
+	data.mlx = mlx_init();
+	data.win = mlx_new_window(data.mlx, WIN_WIDTH, WIN_HEIGHT, "miniRT");
+	data.img = mlx_new_image(data.mlx, WIN_WIDTH, WIN_HEIGHT);
+	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel,
+			&data.line_length, &data.endian);
+	render_scene(&data);
+	mlx_hook(data.win, 17, 0, close_window, &data);
+	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
+	mlx_hook(data.win, 12, 1L << 15, expose_hook, &data);
+	mlx_loop(data.mlx);
+	return (0);
 }

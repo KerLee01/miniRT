@@ -16,7 +16,7 @@ double calculate_diffuse(t_data *data, t_coor hit_point, t_coor normal)
 t_coor	get_normal(t_shape *shape, t_coor hit_point, t_ray *ray)
 {
 	if (shape->type == SPHERE)
-		return (get_sphere_normal((t_sphere *)shape->data, hit_point));
+		return (get_sphere_normal((t_sphere *)shape->data, hit_point, ray));
 	if (shape->type == PLANE)
 		return (get_plane_normal((t_plane *)shape->data, ray));
 	return (get_cylinder_normal((t_cylinder *)shape->data, hit_point, ray));
