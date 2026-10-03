@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by kerlee.*
+*This project has been created as part of the 42 curriculum by kerlee and yichen.*
 
 # miniRT
 
@@ -75,5 +75,4 @@ cy 15.0,0.0,20.6 0.0,1.0,0.0 6.0 21.42 150,150,150
 ### AI Usage Description
 In accordance with 42 curriculum guidelines, AI assistance was utilized for:
 1. **Automated Stress Testing & Edge-Case Identification**: Generating comprehensive test suites for parsing boundary conditions (invalid tokens, negative dimensions, duplicate identifiers, whitespace variations) and geometric edge cases (camera inside objects, gimbal lock singularities).
-2. **Norminette & Code Quality Audits**: Scanning for line length, function line limits, and variable allocations to guarantee strict 42 Norm compliance.
-3. **Documentation Synthesis**: Drafting in-depth architectural breakdown and mathematical derivations for documentation and evaluation preparation.
+2. **Documentation Synthesis**: Drafting in-depth architectural breakdown and mathematical derivations for documentation and evaluation preparation.
