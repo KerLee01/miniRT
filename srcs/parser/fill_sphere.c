@@ -7,16 +7,12 @@ static void	fill_data_attach_node(t_data *data, char **tokens)
 
 	sphere = malloc(sizeof(t_shape));
 	if (!sphere)
-	{
-		clear_split(tokens);
-		print_error(data);
-	}
+		print_error(data, tokens);
 	sphere_data = malloc(sizeof(t_sphere));
 	if (!sphere_data)
 	{
 		free(sphere);
-		clear_split(tokens);
-		print_error(data);
+		print_error(data, tokens);
 	}
 	sphere->type = SPHERE;
 	sphere->data = sphere_data;
@@ -26,8 +22,7 @@ static void	fill_data_attach_node(t_data *data, char **tokens)
 	{
 		free(sphere_data);
 		free(sphere);
-		clear_split(tokens);
-		print_error(data);
+		print_error(data, tokens);
 	}
 	split_rgb(&sphere_data->rgb, tokens[3], tokens, data);
 	sphere->next = NULL;
@@ -42,14 +37,11 @@ void	fill_sphere(char *line, t_data *data)
 	i = 0;
 	tokens = ft_split(line, ' ');
 	if (!tokens)
-		print_error(data);
+		print_error(data, NULL);
 	while (tokens[i] != NULL)
 		i++;
 	if (i != 4)
-	{
-		clear_split(tokens);
-		print_error(data);
-	}
+		print_error(data, tokens);
 	fill_data_attach_node(data, tokens);
 	clear_split(tokens);
 }

@@ -27,7 +27,7 @@ int	main(int argc, char **argv)
 	ft_bzero(&data, sizeof(t_data));
 	if (argc != 2)
 	{
-		write(2, "Error\nUsage: ./miniRT <scene.rt>\n", 33);
+		write(2, "Error\n", 6);
 		return (1);
 	}
 	parse_scene(argv[1], &data);

@@ -99,7 +99,7 @@ In `render_scene`, two nested loops iterate over all pixels from row $y = 0 \to 
 
 *Relevant Files*:
 - `srcs/camera/ray.c`
-- `srcs/render.c`
+- `srcs/render/render.c`
 
 ---
 
@@ -121,9 +121,9 @@ $$P(t) = \text{Origin} + t \cdot \text{Direction} \quad (t > 0)$$
 If no shape is hit, the pixel is colored black (`0x000000`).
 
 *Relevant Files*:
-- `srcs/sphere.c`
-- `srcs/plane.c`
-- `srcs/cylinder.c`
+- `srcs/render/sphere.c`
+- `srcs/render/plane.c`
+- `srcs/render/cylinder.c`
 
 ---
 
@@ -147,8 +147,8 @@ When a shape is hit at collision point $P_{\text{hit}}$, `calculate_lighting` co
    - The resulting color (`0x00RRGGBB`) is written directly into the offscreen MiniLibX image buffer.
 
 *Relevant Files*:
-- `srcs/lighting.c`
-- `srcs/shadow.c`
+- `srcs/render/lighting.c`
+- `srcs/render/shadow.c`
 - `srcs/mlx.c`
 
 ---
@@ -174,9 +174,9 @@ Once all pixels are computed:
 | Subsystem | Source Files | Purpose |
 |---|---|---|
 | **Entry & Window** | `srcs/main.c`, `srcs/mlx.c` | CLI validation, MLX setup, event hooks, pixel buffer writing |
-| **Render Engine** | `srcs/render.c` | Pixel traversal, shape dispatcher, color packing |
+| **Render Engine** | `srcs/render/render.c` | Pixel traversal, shape dispatcher, color packing |
 | **Camera** | `srcs/camera/camera.c`, `viewport.c`, `ray.c` | Orthonormal basis vectors, viewport metrics, ray construction |
-| **Geometry** | `srcs/sphere.c`, `plane.c`, `cylinder.c` | Analytical ray-surface intersections and normal vectors |
-| **Illumination** | `srcs/lighting.c`, `srcs/shadow.c` | Lambertian diffuse model, shadow ray occlusion testing |
+| **Geometry** | `srcs/render/sphere.c`, `plane.c`, `cylinder.c` | Analytical ray-surface intersections and normal vectors |
+| **Illumination** | `srcs/render/lighting.c`, `srcs/render/shadow.c` | Lambertian diffuse model, shadow ray occlusion testing |
 | **Math Library** | `srcs/math/basic_arith.c`, `adv_arith.c`, `helper_funcs.c` | 3D vector arithmetic (dot product, cross product, normalize) |
 | **Parser** | `srcs/parser/parser.c`, `fill_elements.c`, `fill_*.c`, `utils/*.c` | `.rt` line reading, tokenization, error enforcement, memory cleanup |

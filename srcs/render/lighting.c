@@ -1,18 +1,5 @@
 #include "rt.h"
 
-double calculate_diffuse(t_data *data, t_coor hit_point, t_coor normal)
-{
-    t_coor  light_dir;
-    double  diffuse_factor;
-
-    light_dir = subtract(data->light.position, hit_point);
-    light_dir = normalization(light_dir);
-    diffuse_factor = dot_product(normal, light_dir);
-    if (diffuse_factor < 0.0)
-        diffuse_factor = 0.0;
-    return (diffuse_factor * data->light.bright_ratio);
-}
-
 t_coor	get_normal(t_shape *shape, t_coor hit_point, t_ray *ray)
 {
 	if (shape->type == SPHERE)

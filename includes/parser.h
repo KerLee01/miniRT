@@ -5,7 +5,7 @@
 
 //utils.c
 void clear_malloc(t_data *data);
-void print_error(t_data *data);
+void print_error(t_data *data, char **tokens);
 void clear_split(char **tokens);
 double ft_atof(char *str);
 void split_coor(t_coor *element, char *coor, char **tokens, t_data *data);

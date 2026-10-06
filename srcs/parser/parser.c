@@ -75,10 +75,10 @@ void	parse_scene(char *file, t_data *data)
 	char	*line;
 
 	if (check_valid_rt(file) != 0)
-		print_error(data);
+		print_error(data, NULL);
 	fd = open(file, O_RDONLY);
 	if (fd < 0)
-		print_error(data);
+		print_error(data, NULL);
 	line = get_next_line(fd);
 	while (line != NULL)
 	{
@@ -87,7 +87,7 @@ void	parse_scene(char *file, t_data *data)
 		{
 			free(line);
 			close(fd);
-			print_error(data);
+			print_error(data, NULL);
 		}
 		free(line);
 		line = get_next_line(fd);
@@ -95,5 +95,5 @@ void	parse_scene(char *file, t_data *data)
 	close(fd);
 	if (data->cam.filled == 0 || data->ambient.filled == 0
 		|| data->light.filled == 0)
-		print_error(data);
+		print_error(data, NULL);
 }

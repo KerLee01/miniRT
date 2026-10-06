@@ -51,7 +51,6 @@ double hit_cylinder(t_cylinder *cy, t_ray *ray);
 t_coor get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray);
 
 // lighting.c
-double calculate_diffuse(t_data *data, t_coor hit_point, t_coor normal);
 t_coor get_normal(t_shape *shape, t_coor hit_point, t_ray *ray);
 int calculate_lighting(t_data *data, t_shape *shape, t_ray *ray,
 		t_coor hit_point);

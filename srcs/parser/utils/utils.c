@@ -18,13 +18,6 @@ void	clear_malloc(t_data *data)
 	data->shape = NULL;
 }
 
-void	print_error(t_data *data)
-{
-	clear_malloc(data);
-	write(2, "Error\n", 6);
-	exit(1);
-}
-
 void	clear_split(char **tokens)
 {
 	int	i;
@@ -38,6 +31,14 @@ void	clear_split(char **tokens)
 		i++;
 	}
 	free(tokens);
+}
+
+void	print_error(t_data *data, char **tokens)
+{
+	clear_split(tokens);
+	clear_malloc(data);
+	write(2, "Error\n", 6);
+	exit(1);
 }
 
 int	check_normalized_vector(t_coor vec)

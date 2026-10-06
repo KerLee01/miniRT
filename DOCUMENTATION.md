@@ -20,10 +20,10 @@
    - [Lighting Model & Hard Shadows](#lighting-model--hard-shadows)
 6. [Exhaustive Function-by-Function Catalog](#6-exhaustive-function-by-function-catalog)
    - [Program Entry & Windowing (`srcs/main.c`, `srcs/mlx.c`)](#program-entry--windowing)
-   - [Render Pipeline (`srcs/render.c`)](#render-pipeline)
+   - [Render Pipeline (`srcs/render/render.c`)](#render-pipeline)
    - [Camera & Ray Casting (`srcs/camera/`)](#camera--ray-casting)
-   - [Geometric Intersections (`srcs/sphere.c`, `srcs/plane.c`, `srcs/cylinder.c`)](#geometric-intersections)
-   - [Illumination & Shadows (`srcs/lighting.c`, `srcs/shadow.c`)](#illumination--shadows)
+   - [Geometric Intersections (`srcs/render/sphere.c`, `srcs/render/plane.c`, `srcs/render/cylinder.c`)](#geometric-intersections)
+   - [Illumination & Shadows (`srcs/render/lighting.c`, `srcs/render/shadow.c`)](#illumination--shadows)
    - [Vector Mathematics (`srcs/math/`)](#vector-mathematics)
    - [Scene Parser & Validation (`srcs/parser/`)](#scene-parser--validation)
    - [Parser Utilities (`srcs/parser/utils/`)](#parser-utilities)
@@ -123,8 +123,8 @@ sequenceDiagram
     participant Parser as [parser.c](file:///Users/celeste/miniRT/srcs/parser/parser.c)
     participant Camera as [viewport.c](file:///Users/celeste/miniRT/srcs/camera/viewport.c)
     participant MLX as [mlx.c](file:///Users/celeste/miniRT/srcs/mlx.c)
-    participant Render as [render.c](file:///Users/celeste/miniRT/srcs/render.c)
-    participant Light as [lighting.c](file:///Users/celeste/miniRT/srcs/lighting.c)
+    participant Render as [render.c](file:///Users/celeste/miniRT/srcs/render/render.c)
+    participant Light as [lighting.c](file:///Users/celeste/miniRT/srcs/render/lighting.c)
 
     User->>Main: ./miniRT valid_scene.rt
     Main->>Main: Verify argc == 2 & zero-initialize t_data
@@ -293,12 +293,12 @@ typedef struct s_data {
 ### Surface Normals & Inside Handling
 
 A crucial requirement of the 42 subject is handling all possible intersections and the **insides of objects**:
-- **Sphere** ([get_sphere_normal](file:///Users/celeste/miniRT/srcs/sphere.c#L26)):
+- **Sphere** ([get_sphere_normal](file:///Users/celeste/miniRT/srcs/render/sphere.c#L26)):
   $$\vec{N} = \text{normalize}(P - C)$$
   If the ray hits from the inside ($\vec{D} \cdot \vec{N} > 0$), the normal is flipped: $\vec{N} = -\vec{N}$.
-- **Plane** ([get_plane_normal](file:///Users/celeste/miniRT/srcs/plane.c#L29)):
+- **Plane** ([get_plane_normal](file:///Users/celeste/miniRT/srcs/render/plane.c#L29)):
   If $\vec{D} \cdot \vec{N}_{\text{plane}} > 0$, flip $\vec{N} = -\vec{N}_{\text{plane}}$.
-- **Cylinder** ([get_cylinder_normal](file:///Users/celeste/miniRT/srcs/cylinder.c#L87)):
+- **Cylinder** ([get_cylinder_normal](file:///Users/celeste/miniRT/srcs/render/cylinder.c#L87)):
   Detects bottom cap ($-\vec{A}$), top cap ($+\vec{A}$), or side body. If $\vec{D} \cdot \vec{N} > 0$, flips $\vec{N} = -\vec{N}$.
 
 ---
@@ -320,7 +320,7 @@ A crucial requirement of the 42 subject is handling all possible intersections a
 
 ### Render Pipeline
 
-#### [srcs/render.c](file:///Users/celeste/miniRT/srcs/render.c)
+#### [srcs/render/render.c](file:///Users/celeste/miniRT/srcs/render/render.c)
 - **`t_rgb get_base_color(t_shape *shape)`**: Extracts surface color from polymorphic data.
 - **`int get_color_int(t_rgb rgb)`**: Packs RGB channels into `0x00RRGGBB`.
 - **`t_shape *get_closest_shape(t_shape *shapes, t_ray *ray, double *closest_t)`**: Finds nearest intersection across all scene shapes.

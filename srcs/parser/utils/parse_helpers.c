@@ -20,19 +20,15 @@ static char	**get_split_3(char *str, char **tokens, t_data *data)
 	int		i;
 
 	if (count_char(str, ',') != 2)
-	{
-		clear_split(tokens);
-		print_error(data);
-	}
+		print_error(data, tokens);
 	split = ft_split(str, ',');
 	i = 0;
 	while (split && split[i] != NULL)
 		i++;
 	if (i != 3)
 	{
-		clear_split(tokens);
 		clear_split(split);
-		print_error(data);
+		print_error(data, tokens);
 	}
 	return (split);
 }
@@ -60,9 +56,8 @@ void	split_rgb(t_rgb *element, char *rgb, char **tokens, t_data *data)
 		|| element->g < 0 || element->g > 255
 		|| element->b < 0 || element->b > 255)
 	{
-		clear_split(tokens);
 		clear_split(split);
-		print_error(data);
+		print_error(data, tokens);
 	}
 	clear_split(split);
 }

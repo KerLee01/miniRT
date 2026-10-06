@@ -15,12 +15,12 @@ MATH_FLAGS = -lm
 
 SRCS = srcs/main.c \
        srcs/mlx.c \
-       srcs/render.c \
-       srcs/sphere.c \
-       srcs/plane.c \
-       srcs/cylinder.c \
-       srcs/lighting.c \
-       srcs/shadow.c \
+       srcs/render/render.c \
+       srcs/render/sphere.c \
+       srcs/render/plane.c \
+       srcs/render/cylinder.c \
+       srcs/render/lighting.c \
+       srcs/render/shadow.c \
        srcs/math/adv_arith.c \
        srcs/math/basic_arith.c \
        srcs/math/helper_funcs.c \
