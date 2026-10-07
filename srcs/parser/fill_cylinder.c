@@ -5,7 +5,7 @@ static void	free_and_display_error(t_shape *cylinder,
 {
 	free(cylinder_data);
 	free(cylinder);
-	print_error(data, tokens);
+	print_error(data, tokens, "Invalid data found\n");
 }
 
 static void	check_radius_height(t_shape *cylinder,
@@ -22,12 +22,12 @@ static void	fill_data_attach_node(t_data *data, char **tokens)
 
 	cylinder = malloc(sizeof(t_shape));
 	if (!cylinder)
-		print_error(data, tokens);
+		print_error(data, tokens, "Malloc fail\n");
 	cylinder_data = malloc(sizeof(t_cylinder));
 	if (!cylinder_data)
 	{
 		free(cylinder);
-		print_error(data, tokens);
+		print_error(data, tokens, "Malloc fail\n");
 	}
 	cylinder->type = CYLINDER;
 	cylinder->data = cylinder_data;
@@ -48,15 +48,14 @@ void	fill_cylinder(char *line, t_data *data)
 {
 	int		i;
 	char	**tokens;
-
 	i = 0;
 	tokens = ft_split(line, ' ');
 	if (!tokens)
-		print_error(data, NULL);
+		print_error(data, NULL, "ft_split() fail\n");
 	while (tokens[i] != NULL)
 		i++;
-	if (i != 6)
-		print_error(data, tokens);
+	if (i != 6 || !is_valid_num(tokens[3], 1) || !is_valid_num(tokens[4], 1))
+		print_error(data, tokens, "Additional/Lesser data required\n");
 	fill_data_attach_node(data, tokens);
 	clear_split(tokens);
 }

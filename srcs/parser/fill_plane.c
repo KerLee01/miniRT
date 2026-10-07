@@ -7,7 +7,7 @@ static void	if_not_normalized_free(t_data *data, char **tokens,
 	{
 		free(plane_data);
 		free(plane);
-		print_error(data, tokens);
+		print_error(data, tokens, "Invalid data found\n");
 	}
 }
 
@@ -18,12 +18,12 @@ static void	fill_data_attach_node(t_data *data, char **tokens)
 
 	plane = malloc(sizeof(t_shape));
 	if (!plane)
-		print_error(data, tokens);
+		print_error(data, tokens, "Malloc fail\n");
 	plane_data = malloc(sizeof(t_plane));
 	if (!plane_data)
 	{
 		free(plane);
-		print_error(data, tokens);
+		print_error(data, tokens, "Malloc fail\n");
 	}
 	plane->type = PLANE;
 	plane->data = plane_data;
@@ -44,11 +44,11 @@ void	fill_plane(char *line, t_data *data)
 	i = 0;
 	tokens = ft_split(line, ' ');
 	if (!tokens)
-		print_error(data, NULL);
+		print_error(data, NULL, "ft_split() fail\n");
 	while (tokens[i] != NULL)
 		i++;
 	if (i != 4)
-		print_error(data, tokens);
+		print_error(data, tokens, "Additional/Lesser data required\n");
 	fill_data_attach_node(data, tokens);
 	clear_split(tokens);
 }

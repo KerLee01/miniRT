@@ -33,11 +33,18 @@ void	clear_split(char **tokens)
 	free(tokens);
 }
 
-void	print_error(t_data *data, char **tokens)
+void	print_error(t_data *data, char **tokens, char *explicit_err)
 {
+	int	err_length;
+
 	clear_split(tokens);
 	clear_malloc(data);
 	write(2, "Error\n", 6);
+	if (explicit_err)
+	{
+		err_length = ft_strlen(explicit_err);
+		write(2, explicit_err, err_length);
+	}
 	exit(1);
 }
 
