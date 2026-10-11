@@ -40,18 +40,39 @@ int	calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit)
 {
 	t_coor	norm;
 	t_coor	l_dir;
+	t_coor view_vec;
+	t_coor reflection;
+	t_coor scaled_norm;
+	double diff;
+	double spec_dot;
+	double spec_factor;
+	double n_dot_l;
 	double	rgb[3];
 	t_light	*l;
 
 	norm = get_normal(shape, hit, ray);
-	init_ambient(rgb, get_base_color(shape), data->ambient);
+	init_ambient(rgb, get_base_color(shape, hit), data->ambient);
 	l = data->light;
 	while (l != NULL)
 	{
+		view_vec = normalization(subtract(data->cam.origin, hit));
 		l_dir = normalization(subtract(l->position, hit));
-		if (dot_product(norm, l_dir) > 0.0 && !in_shadow(data, hit, l, l_dir))
-			add_light_contrib(rgb, get_base_color(shape), l,
-				dot_product(norm, l_dir));
+		n_dot_l = dot_product(norm, l_dir);
+		scaled_norm = multiply(norm, 2.0 * n_dot_l);
+		reflection = normalization(subtract(scaled_norm, l_dir));
+		spec_dot = dot_product(view_vec, reflection);
+		if(spec_dot < 0.0)
+			spec_dot = 0.0;
+		spec_factor = pow(spec_dot, 32);
+		if (!in_shadow(data, hit, l, l_dir))
+		{
+			diff = dot_product(norm, l_dir);
+			if(diff < 0.0)
+				diff = 0.0;
+			add_light_contrib(rgb, get_base_color(shape, hit), l, diff);
+			add_light_contrib(rgb, get_base_color(shape, hit), l,
+				spec_factor * l->bright_ratio);
+		}
 		l = l->next;
 	}
 	return (get_color_int((t_rgb){clamp_channel(rgb[0]),

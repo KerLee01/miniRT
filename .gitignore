@@ -5,3 +5,4 @@ miniRT_bonus
 .DS_Store
 *.o
 *.a
+*.rt

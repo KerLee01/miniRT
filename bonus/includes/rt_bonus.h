@@ -31,7 +31,7 @@ t_ray	generate_ray(t_camera *cam, int x, int y);
 /* render.c */
 int		get_color_int(t_rgb rgb);
 void	render_scene(t_data *data);
-t_rgb	get_base_color(t_shape *shape);
+t_rgb	get_base_color(t_shape *shape, t_coor hit);
 t_coor	get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray);
 
 /* mlx.c */

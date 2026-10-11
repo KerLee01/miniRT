@@ -1,12 +1,26 @@
 #include "rt_bonus.h"
 #include "mlx.h"
 
-t_rgb	get_base_color(t_shape *shape)
+t_rgb	get_base_color(t_shape *shape, t_coor hit)
 {
+	double scale;
+	int checker;
+	t_rgb black;
+
+	scale = 0.2;
+	black.r = 0;
+	black.g = 0;
+	black.b = 0;
 	if (shape->type == SPHERE)
 		return (((t_sphere *)shape->data)->rgb);
 	if (shape->type == PLANE)
-		return (((t_plane *)shape->data)->rgb);
+	{
+		checker = (int)(floor(hit.x * scale) + floor(hit.z * scale));
+		if(checker % 2 == 0)
+			return (((t_plane *)shape->data)->rgb);
+		else
+			return (black);
+	}
 	return (((t_cylinder *)shape->data)->rgb);
 }
 
