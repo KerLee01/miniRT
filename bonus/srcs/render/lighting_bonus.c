@@ -1,13 +1,16 @@
-#include "rt_bonus.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lighting_bonus.c                                   :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
-static int	clamp_channel(double val)
-{
-	if (val > 255.0)
-		return (255);
-	if (val < 0.0)
-		return (0);
-	return ((int)val);
-}
+#include "rt_bonus.h"
 
 t_coor	get_normal(t_shape *shape, t_coor hit_point, t_ray *ray)
 {
@@ -25,8 +28,7 @@ static void	init_ambient(double *rgb, t_rgb base, t_ambient amb)
 	rgb[2] = base.b * amb.ratio * (amb.rgb.b / 255.0);
 }
 
-static void	add_light_contrib(double *rgb, t_rgb base,
-		t_light *l, double diff)
+static void	add_light_contrib(double *rgb, t_rgb base, t_light *l, double diff)
 {
 	double	factor;
 
@@ -36,42 +38,41 @@ static void	add_light_contrib(double *rgb, t_rgb base,
 	rgb[2] += base.b * factor * (l->rgb.b / 255.0);
 }
 
+static void	add_specular(double *rgb, t_light *l, t_coor refl, t_coor v_vec)
+{
+	double	s_dot;
+	double	factor;
+
+	s_dot = dot_product(v_vec, refl);
+	if (s_dot <= 0.0)
+		return ;
+	factor = pow(s_dot, 32) * l->bright_ratio;
+	rgb[0] += l->rgb.r * factor;
+	rgb[1] += l->rgb.g * factor;
+	rgb[2] += l->rgb.b * factor;
+}
+
 int	calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit)
 {
-	t_coor	norm;
-	t_coor	l_dir;
-	t_coor view_vec;
-	t_coor reflection;
-	t_coor scaled_norm;
-	double diff;
-	double spec_dot;
-	double spec_factor;
-	double n_dot_l;
-	double	rgb[3];
+	t_coor	v[4];
 	t_light	*l;
+	double	rgb[3];
+	t_rgb	base;
 
-	norm = get_normal(shape, hit, ray);
-	init_ambient(rgb, get_base_color(shape, hit), data->ambient);
+	v[0] = get_normal(shape, hit, ray);
+	v[2] = normalization(subtract(data->cam.origin, hit));
+	base = get_base_color(shape, hit);
+	init_ambient(rgb, base, data->ambient);
 	l = data->light;
 	while (l != NULL)
 	{
-		view_vec = normalization(subtract(data->cam.origin, hit));
-		l_dir = normalization(subtract(l->position, hit));
-		n_dot_l = dot_product(norm, l_dir);
-		scaled_norm = multiply(norm, 2.0 * n_dot_l);
-		reflection = normalization(subtract(scaled_norm, l_dir));
-		spec_dot = dot_product(view_vec, reflection);
-		if(spec_dot < 0.0)
-			spec_dot = 0.0;
-		spec_factor = pow(spec_dot, 32);
-		if (!in_shadow(data, hit, l, l_dir))
+		v[1] = normalization(subtract(l->position, hit));
+		if (!in_shadow(data, hit, l, v[1]) && dot_product(v[0], v[1]) > 0.0)
 		{
-			diff = dot_product(norm, l_dir);
-			if(diff < 0.0)
-				diff = 0.0;
-			add_light_contrib(rgb, get_base_color(shape, hit), l, diff);
-			add_light_contrib(rgb, get_base_color(shape, hit), l,
-				spec_factor * l->bright_ratio);
+			add_light_contrib(rgb, base, l, dot_product(v[0], v[1]));
+			v[3] = normalization(subtract(multiply(v[0],
+							2.0 * dot_product(v[0], v[1])), v[1]));
+			add_specular(rgb, l, v[3], v[2]);
 		}
 		l = l->next;
 	}

@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   render_bonus.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rt_bonus.h"
 #include "mlx.h"
 
 t_rgb	get_base_color(t_shape *shape, t_coor hit)
 {
-	double scale;
-	int checker;
-	t_rgb black;
+	double	scale;
+	int		checker;
+	t_rgb	black;
 
 	scale = 0.2;
 	black.r = 0;
@@ -15,11 +27,11 @@ t_rgb	get_base_color(t_shape *shape, t_coor hit)
 		return (((t_sphere *)shape->data)->rgb);
 	if (shape->type == PLANE)
 	{
-		checker = (int)(floor(hit.x * scale) + floor(hit.z * scale));
-		if(checker % 2 == 0)
+		checker = (int)(floor(hit.x * scale) + floor(hit.y * scale)
+				+ floor(hit.z * scale));
+		if (checker % 2 == 0)
 			return (((t_plane *)shape->data)->rgb);
-		else
-			return (black);
+		return (black);
 	}
 	return (((t_cylinder *)shape->data)->rgb);
 }
@@ -46,7 +58,7 @@ t_shape	*get_closest_shape(t_shape *shapes, t_ray *ray, double *closest_t)
 			t = hit_plane((t_plane *)current->data, ray);
 		else if (current->type == CYLINDER)
 			t = hit_cylinder((t_cylinder *)current->data, ray);
-		if (t > 0.001 && t < *closest_t)
+		if (t > EPSILON && t < *closest_t)
 		{
 			*closest_t = t;
 			closest_shape = current;

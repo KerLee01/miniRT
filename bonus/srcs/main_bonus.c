@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main_bonus.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rt_bonus.h"
 #include "mlx.h"
 #include <stdlib.h>
@@ -27,7 +39,7 @@ int	main(int argc, char **argv)
 	ft_bzero(&data, sizeof(t_data));
 	if (argc != 2)
 	{
-		write(2, "Error\n", 6);
+		write(2, "Error\nUsage: ./miniRT_bonus <file.rt>\n", 39);
 		return (1);
 	}
 	parse_scene(argv[1], &data);

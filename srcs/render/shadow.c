@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   shadow.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rt.h"
 
 int	in_shadow(t_data *data, t_coor hit_point, t_coor light_dir)
@@ -6,11 +18,9 @@ int	in_shadow(t_data *data, t_coor hit_point, t_coor light_dir)
 	t_ray	shadow_ray;
 	double	t;
 	double	dist_to_light;
-	t_coor	v_light;
 
-	v_light = subtract(data->light.position, hit_point);
-	dist_to_light = sqrt(dot_product(v_light, v_light));
-	shadow_ray.origin = addition(hit_point, multiply(light_dir, 0.001));
+	dist_to_light = magnitude(subtract(data->light.position, hit_point));
+	shadow_ray.origin = addition(hit_point, multiply(light_dir, EPSILON));
 	shadow_ray.direction = light_dir;
 	current = data->shape;
 	while (current != NULL)
@@ -22,7 +32,7 @@ int	in_shadow(t_data *data, t_coor hit_point, t_coor light_dir)
 			t = hit_plane((t_plane *)current->data, &shadow_ray);
 		else if (current->type == CYLINDER)
 			t = hit_cylinder((t_cylinder *)current->data, &shadow_ray);
-		if (t > 0.001 && t < dist_to_light)
+		if (t > EPSILON && t < dist_to_light)
 			return (1);
 		current = current->next;
 	}

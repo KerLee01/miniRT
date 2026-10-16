@@ -1,11 +1,23 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utils_bonus.c                                      :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rt_bonus.h"
 
 void	clear_malloc(t_data *data)
 {
 	t_shape	*curr;
 	t_shape	*buff;
-	t_light *l_curr;
-	t_light *l_buff;
+	t_light	*l_curr;
+	t_light	*l_buff;
 
 	curr = data->shape;
 	while (curr != NULL)
@@ -17,7 +29,7 @@ void	clear_malloc(t_data *data)
 	}
 	data->shape = NULL;
 	l_curr = data->light;
-	while(l_curr != NULL)
+	while (l_curr != NULL)
 	{
 		l_buff = l_curr;
 		l_curr = l_curr->next;

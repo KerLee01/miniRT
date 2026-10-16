@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   rt_math_bonus.h                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef RT_MATH_BONUS_H
 # define RT_MATH_BONUS_H
 
@@ -25,5 +37,6 @@ t_coor	cross_product(t_coor a, t_coor b);
 /* helper_func.c */
 t_coor	create_new_coor(double x, double y, double z);
 double	find_square_total(t_coor coor);
+int		clamp_channel(double val);
 
 #endif

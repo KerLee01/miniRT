@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   lighting.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rt.h"
 
 t_coor	get_normal(t_shape *shape, t_coor hit_point, t_ray *ray)
@@ -11,19 +23,18 @@ t_coor	get_normal(t_shape *shape, t_coor hit_point, t_ray *ray)
 
 int	calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit)
 {
-	t_coor	normal;
-	t_coor	light_dir;
+	t_coor	v[2];
 	double	diff;
 	double	intensity;
 	t_rgb	c;
 
-	normal = get_normal(shape, hit, ray);
+	v[0] = get_normal(shape, hit, ray);
 	c = get_base_color(shape);
-	light_dir = normalization(subtract(data->light.position, hit));
+	v[1] = normalization(subtract(data->light.position, hit));
 	diff = 0.0;
-	if (!in_shadow(data, hit, light_dir))
+	if (!in_shadow(data, hit, v[1]))
 	{
-		diff = dot_product(normal, light_dir);
+		diff = dot_product(v[0], v[1]);
 		if (diff < 0.0)
 			diff = 0.0;
 	}
@@ -31,5 +42,5 @@ int	calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit)
 	if (intensity > 1.0)
 		intensity = 1.0;
 	return (get_color_int((t_rgb){(int)(c.r * intensity),
-			(int)(c.g * intensity), (int)(c.b * intensity)}));
+		(int)(c.g * intensity), (int)(c.b * intensity)}));
 }

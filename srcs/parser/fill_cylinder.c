@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   fill_cylinder.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
+/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "rt.h"
 
 static void	free_and_display_error(t_shape *cylinder,
@@ -48,6 +60,7 @@ void	fill_cylinder(char *line, t_data *data)
 {
 	int		i;
 	char	**tokens;
+
 	i = 0;
 	tokens = ft_split(line, ' ');
 	if (!tokens)
