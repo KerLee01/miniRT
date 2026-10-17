@@ -6,7 +6,7 @@
 /*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
-/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*   Updated: 2026/10/17 16:58:08 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
 
-# define EPSILON 1e-4
+# define EPSILON 1e-3
 
 # include <strings.h>
 # include <unistd.h>
@@ -68,7 +68,7 @@ int		calculate_lighting(t_data *data, t_shape *shape, t_ray *ray,
 			t_coor hit);
 
 /* shadow.c */
-int		in_shadow(t_data *data, t_coor hit,
-			t_light *light, t_coor light_dir);
+int		in_shadow(t_data *data, t_coor hit, t_coor norm,
+			t_light *light);
 
 #endif

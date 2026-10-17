@@ -16,7 +16,7 @@
 # define WIN_WIDTH 800
 # define WIN_HEIGHT 600
 
-# define EPSILON 1e-4
+# define EPSILON 1e-3
 
 # include <strings.h>
 # include <unistd.h>
@@ -68,6 +68,7 @@ int		calculate_lighting(t_data *data, t_shape *shape, t_ray *ray,
 			t_coor hit_point);
 
 /* shadow.c */
-int		in_shadow(t_data *data, t_coor hit_point, t_coor light_dir);
+int		in_shadow(t_data *data, t_coor hit_point, t_coor norm,
+			t_coor light_dir);
 
 #endif

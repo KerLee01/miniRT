@@ -32,12 +32,8 @@ int	calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit)
 	c = get_base_color(shape);
 	v[1] = normalization(subtract(data->light.position, hit));
 	diff = 0.0;
-	if (!in_shadow(data, hit, v[1]))
-	{
+	if (dot_product(v[0], v[1]) > 0.0 && !in_shadow(data, hit, v[0], v[1]))
 		diff = dot_product(v[0], v[1]);
-		if (diff < 0.0)
-			diff = 0.0;
-	}
 	intensity = data->ambient.ratio + (diff * data->light.bright_ratio);
 	if (intensity > 1.0)
 		intensity = 1.0;

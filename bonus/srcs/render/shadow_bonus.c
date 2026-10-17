@@ -12,7 +12,7 @@
 
 #include "rt_bonus.h"
 
-int	in_shadow(t_data *data, t_coor hit, t_light *light, t_coor light_dir)
+int	in_shadow(t_data *data, t_coor hit, t_coor norm, t_light *light)
 {
 	t_shape	*curr;
 	t_ray	shadow_ray;
@@ -20,8 +20,8 @@ int	in_shadow(t_data *data, t_coor hit, t_light *light, t_coor light_dir)
 	double	dist;
 
 	dist = magnitude(subtract(light->position, hit));
-	shadow_ray.origin = addition(hit, multiply(light_dir, EPSILON));
-	shadow_ray.direction = light_dir;
+	shadow_ray.origin = addition(hit, multiply(norm, EPSILON));
+	shadow_ray.direction = normalization(subtract(light->position, hit));
 	curr = data->shape;
 	while (curr != NULL)
 	{
@@ -32,7 +32,7 @@ int	in_shadow(t_data *data, t_coor hit, t_light *light, t_coor light_dir)
 			t = hit_plane((t_plane *)curr->data, &shadow_ray);
 		else if (curr->type == CYLINDER)
 			t = hit_cylinder((t_cylinder *)curr->data, &shadow_ray);
-		if (t > EPSILON && t < dist)
+		if (t > EPSILON && t < dist - EPSILON)
 			return (1);
 		curr = curr->next;
 	}

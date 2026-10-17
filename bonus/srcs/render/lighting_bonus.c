@@ -67,7 +67,7 @@ int	calculate_lighting(t_data *data, t_shape *shape, t_ray *ray, t_coor hit)
 	while (l != NULL)
 	{
 		v[1] = normalization(subtract(l->position, hit));
-		if (!in_shadow(data, hit, l, v[1]) && dot_product(v[0], v[1]) > 0.0)
+		if (dot_product(v[0], v[1]) > 0.0 && !in_shadow(data, hit, v[0], l))
 		{
 			add_light_contrib(rgb, base, l, dot_product(v[0], v[1]));
 			v[3] = normalization(subtract(multiply(v[0],
