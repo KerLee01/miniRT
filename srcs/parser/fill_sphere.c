@@ -28,17 +28,13 @@ static void	fill_data_attach_node(t_data *data, char **tokens)
 	}
 	sphere->type = SPHERE;
 	sphere->data = sphere_data;
+	sphere->next = NULL;
+	insert_next_shape(data, sphere);
 	split_coor(&sphere_data->center, tokens[1], tokens, data);
 	sphere_data->radius = ft_atof(tokens[2]) / 2.0;
 	if (sphere_data->radius <= 0.0)
-	{
-		free(sphere_data);
-		free(sphere);
 		print_error(data, tokens, "Invalid data found\n");
-	}
 	split_rgb(&sphere_data->rgb, tokens[3], tokens, data);
-	sphere->next = NULL;
-	insert_next_shape(data, sphere);
 }
 
 void	fill_sphere(char *line, t_data *data)

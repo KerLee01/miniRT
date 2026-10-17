@@ -83,28 +83,22 @@ int	find_and_fill_element(char *line, t_data *data)
 
 void	parse_scene(char *file, t_data *data)
 {
-	int		fd;
-	char	*line;
-
 	if (check_valid_rt(file) != 0)
 		print_error(data, NULL, "Invalid file\n");
-	fd = open(file, O_RDONLY);
-	if (fd < 0)
+	data->fd = open(file, O_RDONLY);
+	if (data->fd < 0)
 		print_error(data, NULL, "Invalid fd\n");
-	line = get_next_line(fd);
-	while (line != NULL)
+	data->curr_line = get_next_line(data->fd);
+	while (data->curr_line != NULL)
 	{
-		sanitize_line(line);
-		if (find_and_fill_element(line, data) == 1)
-		{
-			free(line);
-			close(fd);
+		sanitize_line(data->curr_line);
+		if (find_and_fill_element(data->curr_line, data) == 1)
 			print_error(data, NULL, "Empty file/Invalid elements found\n");
-		}
-		free(line);
-		line = get_next_line(fd);
+		free(data->curr_line);
+		data->curr_line = get_next_line(data->fd);
 	}
-	close(fd);
+	close(data->fd);
+	data->fd = -1;
 	if (data->cam.filled == 0 || data->ambient.filled == 0
 		|| data->light == NULL)
 		print_error(data, NULL, "One or more element A/C/L is missing\n");

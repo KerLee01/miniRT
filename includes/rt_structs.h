@@ -111,6 +111,8 @@ typedef struct s_data
 	t_light			light;
 	t_ambient		ambient;
 	t_shape			*shape;
+	char			*curr_line;
+	int				fd;
 }	t_data;
 
 #endif

@@ -12,17 +12,6 @@
 
 #include "rt.h"
 
-static void	if_not_normalized_free(t_data *data, char **tokens,
-		t_shape *plane, t_plane *plane_data)
-{
-	if (check_normalized_vector(plane_data->forward) == 0)
-	{
-		free(plane_data);
-		free(plane);
-		print_error(data, tokens, "Invalid data found\n");
-	}
-}
-
 static void	fill_data_attach_node(t_data *data, char **tokens)
 {
 	t_shape	*plane;
@@ -39,13 +28,14 @@ static void	fill_data_attach_node(t_data *data, char **tokens)
 	}
 	plane->type = PLANE;
 	plane->data = plane_data;
-	split_coor(&plane_data->point, tokens[1], tokens, data);
-	split_coor(&plane_data->forward, tokens[2], tokens, data);
-	if_not_normalized_free(data, tokens, plane, plane_data);
-	plane_data->forward = normalization(plane_data->forward);
-	split_rgb(&plane_data->rgb, tokens[3], tokens, data);
 	plane->next = NULL;
 	insert_next_shape(data, plane);
+	split_coor(&plane_data->point, tokens[1], tokens, data);
+	split_coor(&plane_data->forward, tokens[2], tokens, data);
+	if (check_normalized_vector(plane_data->forward) == 0)
+		print_error(data, tokens, "Invalid data found\n");
+	plane_data->forward = normalization(plane_data->forward);
+	split_rgb(&plane_data->rgb, tokens[3], tokens, data);
 }
 
 void	fill_plane(char *line, t_data *data)

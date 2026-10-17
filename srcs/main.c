@@ -32,6 +32,23 @@ int	key_hook(int keycode, t_data *data)
 	return (0);
 }
 
+static void	init_mlx(t_data *data)
+{
+	data->mlx = mlx_init();
+	if (!data->mlx)
+		print_error(data, NULL, "mlx_init() fail\n");
+	data->win = mlx_new_window(data->mlx, WIN_WIDTH, WIN_HEIGHT, "miniRT");
+	if (!data->win)
+		print_error(data, NULL, "mlx_new_window() fail\n");
+	data->img = mlx_new_image(data->mlx, WIN_WIDTH, WIN_HEIGHT);
+	if (!data->img)
+		print_error(data, NULL, "mlx_new_image() fail\n");
+	data->addr = mlx_get_data_addr(data->img, &data->bits_per_pixel,
+			&data->line_length, &data->endian);
+	if (!data->addr)
+		print_error(data, NULL, "mlx_get_data_addr() fail\n");
+}
+
 int	main(int argc, char **argv)
 {
 	t_data	data;
@@ -47,11 +64,7 @@ int	main(int argc, char **argv)
 	find_right_axis(&data.cam);
 	find_true_up(&data.cam);
 	calculate_viewport(&data.cam);
-	data.mlx = mlx_init();
-	data.win = mlx_new_window(data.mlx, WIN_WIDTH, WIN_HEIGHT, "miniRT");
-	data.img = mlx_new_image(data.mlx, WIN_WIDTH, WIN_HEIGHT);
-	data.addr = mlx_get_data_addr(data.img, &data.bits_per_pixel,
-			&data.line_length, &data.endian);
+	init_mlx(&data);
 	render_scene(&data);
 	mlx_hook(data.win, 17, 0, close_window, &data);
 	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);

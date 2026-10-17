@@ -12,19 +12,16 @@
 
 #include "rt_bonus.h"
 
-static void	free_and_display_error(t_shape *cylinder,
-		t_cylinder *cylinder_data, t_data *data, char **tokens)
+static void	check_cylinder_data(t_data *data, char **tokens,
+		t_cylinder *cylinder_data)
 {
-	free(cylinder_data);
-	free(cylinder);
-	print_error(data, tokens, "Invalid data found\n");
-}
-
-static void	check_radius_height(t_shape *cylinder,
-		t_cylinder *cylinder_data, t_data *data, char **tokens)
-{
+	if (check_normalized_vector(cylinder_data->forward) == 0)
+		print_error(data, tokens, "Invalid data found\n");
+	cylinder_data->forward = normalization(cylinder_data->forward);
+	cylinder_data->radius = ft_atof(tokens[3]) / 2.0;
+	cylinder_data->height = ft_atof(tokens[4]);
 	if (cylinder_data->radius <= 0.0 || cylinder_data->height <= 0.0)
-		free_and_display_error(cylinder, cylinder_data, data, tokens);
+		print_error(data, tokens, "Invalid data found\n");
 }
 
 static void	fill_data_attach_node(t_data *data, char **tokens)
@@ -43,17 +40,12 @@ static void	fill_data_attach_node(t_data *data, char **tokens)
 	}
 	cylinder->type = CYLINDER;
 	cylinder->data = cylinder_data;
-	split_coor(&cylinder_data->center, tokens[1], tokens, data);
-	split_coor(&cylinder_data->forward, tokens[2], tokens, data);
-	if (check_normalized_vector(cylinder_data->forward) == 0)
-		free_and_display_error(cylinder, cylinder_data, data, tokens);
-	cylinder_data->forward = normalization(cylinder_data->forward);
-	cylinder_data->radius = ft_atof(tokens[3]) / 2.0;
-	cylinder_data->height = ft_atof(tokens[4]);
-	check_radius_height(cylinder, cylinder_data, data, tokens);
-	split_rgb(&cylinder_data->rgb, tokens[5], tokens, data);
 	cylinder->next = NULL;
 	insert_next_shape(data, cylinder);
+	split_coor(&cylinder_data->center, tokens[1], tokens, data);
+	split_coor(&cylinder_data->forward, tokens[2], tokens, data);
+	check_cylinder_data(data, tokens, cylinder_data);
+	split_rgb(&cylinder_data->rgb, tokens[5], tokens, data);
 }
 
 void	fill_cylinder(char *line, t_data *data)

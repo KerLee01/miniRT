@@ -31,10 +31,12 @@ int	ft_atoi(const char *str)
 	}
 	while (*str >= '0' && *str <= '9' && *str != '\0')
 	{
-		result *= 10;
-		result += *str - '0';
+		if (result > 2147483647L)
+			break ;
+		result = result * 10 + (*str - '0');
 		str++;
 	}
-	result *= negative;
-	return ((int)result);
+	if (result * negative > 2147483647L || result * negative < -2147483648L)
+		return (-1);
+	return ((int)(result * negative));
 }

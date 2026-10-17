@@ -27,9 +27,9 @@ t_rgb	get_base_color(t_shape *shape, t_coor hit)
 		return (((t_sphere *)shape->data)->rgb);
 	if (shape->type == PLANE)
 	{
-		checker = (int)(floor((hit.x + EPSILON) * scale)
-				+ floor((hit.y + EPSILON) * scale)
-				+ floor((hit.z + EPSILON) * scale));
+		checker = (int)fmod(fabs(floor((hit.x + EPSILON) * scale)), 2.0)
+			+ (int)fmod(fabs(floor((hit.y + EPSILON) * scale)), 2.0)
+			+ (int)fmod(fabs(floor((hit.z + EPSILON) * scale)), 2.0);
 		if (checker % 2 == 0)
 			return (((t_plane *)shape->data)->rgb);
 		return (black);

@@ -16,26 +16,28 @@ void	clear_malloc(t_data *data)
 {
 	t_shape	*curr;
 	t_shape	*buff;
-	t_light	*l_curr;
-	t_light	*l_buff;
 
 	curr = data->shape;
 	while (curr != NULL)
 	{
+		buff = curr->next;
 		free(curr->data);
-		buff = curr;
-		curr = curr->next;
-		free(buff);
+		free(curr);
+		curr = buff;
 	}
 	data->shape = NULL;
-	l_curr = data->light;
-	while (l_curr != NULL)
+	while (data->light != NULL)
 	{
-		l_buff = l_curr;
-		l_curr = l_curr->next;
-		free(l_buff);
+		curr = (t_shape *)data->light->next;
+		free(data->light);
+		data->light = (t_light *)curr;
 	}
-	data->light = NULL;
+	if (data->curr_line)
+		free(data->curr_line);
+	data->curr_line = NULL;
+	if (data->fd > 0)
+		close(data->fd);
+	data->fd = -1;
 }
 
 void	clear_split(char **tokens)
@@ -74,7 +76,7 @@ int	check_normalized_vector(t_coor vec)
 		|| vec.y < -1.0 || vec.y > 1.0
 		|| vec.z < -1.0 || vec.z > 1.0)
 		return (0);
-	if (vec.x == 0.0 && vec.y == 0.0 && vec.z == 0.0)
+	if (dot_product(vec, vec) < 1e-6)
 		return (0);
 	return (1);
 }
