@@ -6,7 +6,7 @@
 /*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
-/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*   Updated: 2026/10/17 23:05:42 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,8 @@ double	check_cylinder_bounds(t_cylinder *cy, t_ray *ray, double t)
 	hit_point = addition(ray->origin, multiply(ray->direction, t));
 	v = subtract(hit_point, cy->center);
 	hit_height = dot_product(v, cy->forward);
-	if (hit_height >= -EPSILON && hit_height <= cy->height + EPSILON)
+	if (hit_height >= -(cy->height / 2.0) - EPSILON
+		&& hit_height <= (cy->height / 2.0) + EPSILON)
 		return (t);
 	return (-1.0);
 }
@@ -78,13 +79,15 @@ double	hit_cylinder(t_cylinder *cy, t_ray *ray)
 	double	closest_t;
 	double	t_cap;
 	t_coor	top;
+	t_coor	bottom;
 
 	closest_t = 1e30;
 	closest_t = hit_cylinder_body(cy, ray, &closest_t);
-	t_cap = hit_cap(cy, ray, cy->center, multiply(cy->forward, -1.0));
+	bottom = addition(cy->center, multiply(cy->forward, -(cy->height / 2.0)));
+	t_cap = hit_cap(cy, ray, bottom, multiply(cy->forward, -1.0));
 	if (t_cap > EPSILON && t_cap < closest_t)
 		closest_t = t_cap;
-	top = addition(cy->center, multiply(cy->forward, cy->height));
+	top = addition(cy->center, multiply(cy->forward, cy->height / 2.0));
 	t_cap = hit_cap(cy, ray, top, cy->forward);
 	if (t_cap > EPSILON && t_cap < closest_t)
 		closest_t = t_cap;
@@ -102,9 +105,9 @@ t_coor	get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray)
 
 	v = subtract(hit_point, cy->center);
 	proj = dot_product(v, cy->forward);
-	if (proj < EPSILON)
+	if (fabs(proj + (cy->height / 2.0)) < EPSILON)
 		n = multiply(cy->forward, -1.0);
-	else if (fabs(proj - cy->height) < EPSILON)
+	else if (fabs(proj - (cy->height / 2.0)) < EPSILON)
 		n = cy->forward;
 	else
 	{

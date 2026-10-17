@@ -6,7 +6,7 @@
 /*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
-/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*   Updated: 2026/10/17 23:16:55 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ int	main(int argc, char **argv)
 	ft_bzero(&data, sizeof(t_data));
 	if (argc != 2)
 	{
-		write(2, "Error\nUsage: ./miniRT <file.rt>\n", 33);
+		write(2, "Error\nToo many / too little arguments\n", 38);
 		return (1);
 	}
 	parse_scene(argv[1], &data);
