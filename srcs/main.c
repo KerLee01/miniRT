@@ -6,7 +6,7 @@
 /*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
-/*   Updated: 2026/10/17 23:16:55 by kgriset          ###   ########.fr       */
+/*   Updated: 2026/10/18 13:01:21 by kerlee           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,11 @@ int	close_window(t_data *data)
 		mlx_destroy_image(data->mlx, data->img);
 	if (data->win)
 		mlx_destroy_window(data->mlx, data->win);
+	if(data->mlx)
+	{
+		mlx_destroy_display(data->mlx);
+		free(data->mlx);
+	}
 	exit(0);
 	return (0);
 }
@@ -66,9 +71,9 @@ int	main(int argc, char **argv)
 	calculate_viewport(&data.cam);
 	init_mlx(&data);
 	render_scene(&data);
-	mlx_hook(data.win, 17, 0, close_window, &data);
-	mlx_hook(data.win, 2, 1L << 0, key_hook, &data);
-	mlx_hook(data.win, 12, 1L << 15, expose_hook, &data);
+	mlx_hook(data.win, 17, 0, (int (*)())(void *)close_window, &data);
+	mlx_hook(data.win, 2, 1L << 0, (int (*)())(void *)key_hook, &data);
+	mlx_hook(data.win, 12, 1L << 15, (int (*)())(void *)expose_hook, &data);
 	mlx_loop(data.mlx);
 	return (0);
 }

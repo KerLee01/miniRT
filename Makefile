@@ -8,7 +8,7 @@ CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
 MLX_DIR = ./mlx
-MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit
+MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
 
 MATH_FLAGS = -lm
 
@@ -69,6 +69,7 @@ OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
+	make -C ./mlx
 	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) $(MLX_FLAGS) $(MATH_FLAGS) -o $(NAME)
 
 $(LIBFT):
@@ -77,6 +78,7 @@ $(LIBFT):
 bonus: $(NAME_BONUS)
 
 $(NAME_BONUS): $(OBJS_BONUS) $(LIBFT)
+	make -C ./mlx
 	$(CC) $(CFLAGS) $(INCLUDES_BONUS) $(OBJS_BONUS) $(LIBFT) $(MLX_FLAGS) $(MATH_FLAGS) -o $(NAME_BONUS)
 
 srcs/%.o: srcs/%.c
