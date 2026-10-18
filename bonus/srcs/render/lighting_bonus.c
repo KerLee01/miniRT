@@ -6,7 +6,7 @@
 /*   By: kerlee <marvin@42.fr>                      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/01/15 20:37:44 by kerlee            #+#    #+#             */
-/*   Updated: 2026/01/18 18:28:49 by kerlee           ###   ########.fr       */
+/*   Updated: 2026/10/18 10:22:54 by kgriset          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ static void	add_specular(double *rgb, t_light *l, t_coor refl, t_coor v_vec)
 	s_dot = dot_product(v_vec, refl);
 	if (s_dot <= 0.0)
 		return ;
-	factor = pow(s_dot, 32) * l->bright_ratio;
+	factor = pow(s_dot, 32) * 3.0;
 	rgb[0] += l->rgb.r * factor;
 	rgb[1] += l->rgb.g * factor;
 	rgb[2] += l->rgb.b * factor;
