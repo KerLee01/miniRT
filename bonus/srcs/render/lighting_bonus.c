@@ -46,7 +46,7 @@ static void	add_specular(double *rgb, t_light *l, t_coor refl, t_coor v_vec)
 	s_dot = dot_product(v_vec, refl);
 	if (s_dot <= 0.0)
 		return ;
-	factor = pow(s_dot, 32) * 3.0;
+	factor = pow(s_dot, 64);
 	rgb[0] += l->rgb.r * factor;
 	rgb[1] += l->rgb.g * factor;
 	rgb[2] += l->rgb.b * factor;
