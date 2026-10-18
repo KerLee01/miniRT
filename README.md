@@ -1,4 +1,4 @@
-*This project has been created as part of the 42 curriculum by kerlee and yichen.*
+*This project has been created as part of the 42 curriculum by kerlee and yichzhan.*
 
 # miniRT
 
