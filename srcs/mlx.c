@@ -26,3 +26,12 @@ int	expose_hook(t_data *data)
 	mlx_put_image_to_window(data->mlx, data->win, data->img, 0, 0);
 	return (0);
 }
+
+#ifdef __APPLE__
+
+int	mlx_destroy_display(void *mlx_ptr)
+{
+	(void)mlx_ptr;
+	return (0);
+}
+#endif

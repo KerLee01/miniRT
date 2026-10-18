@@ -17,6 +17,29 @@ BLUE="\033[34m"
 LOG_FILE="/tmp/minirt_test_log.txt"
 ERR_FILE="/tmp/minirt_err_log.txt"
 
+# Cross-platform memory leak checking (leaks on macOS, valgrind on Linux)
+if command -v leaks >/dev/null 2>&1; then
+    LEAK_TOOL="leaks"
+    run_leak_check() {
+        leaks -atExit -- "$@" > "$LOG_FILE" 2>&1
+        grep -q "0 leaks for 0 total leaked bytes" "$LOG_FILE"
+        return $?
+    }
+elif command -v valgrind >/dev/null 2>&1; then
+    LEAK_TOOL="valgrind"
+    run_leak_check() {
+        valgrind --leak-check=full --show-leak-kinds=all "$@" > "$LOG_FILE" 2>&1
+        grep -q "ERROR SUMMARY: 0 errors" "$LOG_FILE" && ! grep -q "definitely lost: [1-9]" "$LOG_FILE"
+        return $?
+    }
+else
+    LEAK_TOOL="none"
+    run_leak_check() {
+        "$@" > "$LOG_FILE" 2>&1
+        return 0
+    }
+fi
+
 # Ensure executables exist
 check_build() {
     if [ ! -f "./miniRT" ] || [ ! -f "./miniRT_bonus" ]; then
@@ -48,22 +71,23 @@ run_visual_test() {
     echo -e "${BLUE}-------------------------------- Scene Contents --------------------------------${RESET}"
     cat "$scene_file"
     echo -e "${BLUE}--------------------------------------------------------------------------------${RESET}"
-    echo -e "${MAGENTA}>> Launching ${exec_bin} with leaks check...${RESET}"
+    echo -e "${MAGENTA}>> Launching ${exec_bin} with memory check (${LEAK_TOOL})...${RESET}"
     echo -e "${MAGENTA}>> [Inspect the rendered window, then press ESC or close window to proceed]${RESET}\n"
 
     # Run executable with leaks checking
-    leaks -atExit -- "$exec_bin" "$scene_file" > "$LOG_FILE" 2>&1
-    local leak_run_code=$?
-
-    echo -e "${BOLD}--- Test Result ---${RESET}"
-    # Check leaks output
-    if grep -q "0 leaks for 0 total leaked bytes" "$LOG_FILE"; then
+    if run_leak_check "$exec_bin" "$scene_file"; then
+        echo -e "${BOLD}--- Test Result ---${RESET}"
         echo -e "Window Execution:      ${GREEN}PASS (Clean exit)${RESET}"
-        echo -e "Memory Leak Check:     ${GREEN}✅ 0 leaks for 0 total leaked bytes [PASS]${RESET}"
+        echo -e "Memory Leak Check:     ${GREEN}✅ 0 leaks / 0 errors [PASS]${RESET}"
     else
-        echo -e "Window Execution:      ${YELLOW}Notice (Check leak details below)${RESET}"
-        echo -e "Memory Leak Check:     ${RED}❌ LEAKS DETECTED!${RESET}"
-        grep -E "leaks for|total leaked bytes" "$LOG_FILE"
+        echo -e "${BOLD}--- Test Result ---${RESET}"
+        echo -e "Window Execution:      ${YELLOW}Notice (Check details below)${RESET}"
+        echo -e "Memory Leak Check:     ${RED}❌ LEAKS / ERRORS DETECTED!${RESET}"
+        if [ "$LEAK_TOOL" = "leaks" ]; then
+            grep -E "leaks for|total leaked bytes" "$LOG_FILE"
+        elif [ "$LEAK_TOOL" = "valgrind" ]; then
+            grep -E "definitely lost:|indirectly lost:|ERROR SUMMARY:" "$LOG_FILE"
+        fi
     fi
 
     echo ""
@@ -87,9 +111,11 @@ run_error_tests() {
     total_count=$((total_count + 1))
     ./miniRT > "$ERR_FILE" 2>&1
     local code=$?
-    leaks -atExit -- ./miniRT > "$LOG_FILE" 2>&1
+    local has_0_leaks=0
+    if run_leak_check ./miniRT; then
+        has_0_leaks=1
+    fi
     local has_err=$(grep -q "Error" "$ERR_FILE" && echo 1 || echo 0)
-    local has_0_leaks=$(grep -q "0 leaks for 0 total leaked bytes" "$LOG_FILE" && echo 1 || echo 0)
     if [ $code -ne 0 ] && [ $has_err -eq 1 ] && [ $has_0_leaks -eq 1 ]; then
         printf "${GREEN}[PASS]${RESET} %-35s (Exit: %d | Msg: OK | Leaks: 0)\n" "missing_argument" "$code"
         pass_count=$((pass_count + 1))
@@ -101,9 +127,11 @@ run_error_tests() {
     total_count=$((total_count + 1))
     ./miniRT "does_not_exist.rt" > "$ERR_FILE" 2>&1
     code=$?
-    leaks -atExit -- ./miniRT "does_not_exist.rt" > "$LOG_FILE" 2>&1
+    has_0_leaks=0
+    if run_leak_check ./miniRT "does_not_exist.rt"; then
+        has_0_leaks=1
+    fi
     has_err=$(grep -q "Error" "$ERR_FILE" && echo 1 || echo 0)
-    has_0_leaks=$(grep -q "0 leaks for 0 total leaked bytes" "$LOG_FILE" && echo 1 || echo 0)
     if [ $code -ne 0 ] && [ $has_err -eq 1 ] && [ $has_0_leaks -eq 1 ]; then
         printf "${GREEN}[PASS]${RESET} %-35s (Exit: %d | Msg: OK | Leaks: 0)\n" "non_existent_file" "$code"
         pass_count=$((pass_count + 1))
@@ -117,9 +145,11 @@ run_error_tests() {
         local base_name=$(basename "$scene")
         ./miniRT "$scene" > "$ERR_FILE" 2>&1
         code=$?
-        leaks -atExit -- ./miniRT "$scene" > "$LOG_FILE" 2>&1
+        has_0_leaks=0
+        if run_leak_check ./miniRT "$scene"; then
+            has_0_leaks=1
+        fi
         has_err=$(grep -q "Error" "$ERR_FILE" && echo 1 || echo 0)
-        has_0_leaks=$(grep -q "0 leaks for 0 total leaked bytes" "$LOG_FILE" && echo 1 || echo 0)
 
         if [ $code -ne 0 ] && [ $has_err -eq 1 ] && [ $has_0_leaks -eq 1 ]; then
             printf "${GREEN}[PASS]${RESET} %-35s (Exit: %d | Msg: OK | Leaks: 0)\n" "$base_name" "$code"

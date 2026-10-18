@@ -7,8 +7,15 @@ LIBFT = $(LIBFT_DIR)/libft.a
 CC = cc
 CFLAGS = -Wall -Wextra -Werror
 
-MLX_DIR = ./mlx
-MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm -o $(NAME)
+UNAME_S := $(shell uname -s)
+
+ifeq ($(UNAME_S),Linux)
+	MLX_DIR = ./mlx
+	MLX_FLAGS = -L$(MLX_DIR) -lmlx -lXext -lX11 -lm
+else
+	MLX_DIR = ./mlx_macos
+	MLX_FLAGS = -L$(MLX_DIR) -lmlx -framework OpenGL -framework AppKit -lm
+endif
 
 MATH_FLAGS = -lm
 
@@ -69,8 +76,8 @@ OBJS_BONUS = $(SRCS_BONUS:.c=.o)
 all: $(NAME)
 
 $(NAME): $(OBJS) $(LIBFT)
-	make -C ./mlx
-	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) $(MLX_FLAGS) $(MATH_FLAGS) -o $(NAME)
+	make -C $(MLX_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES) $(OBJS) $(LIBFT) $(MLX_FLAGS) -o $(NAME)
 
 $(LIBFT):
 	make -C $(LIBFT_DIR)
@@ -78,8 +85,8 @@ $(LIBFT):
 bonus: $(NAME_BONUS)
 
 $(NAME_BONUS): $(OBJS_BONUS) $(LIBFT)
-	make -C ./mlx
-	$(CC) $(CFLAGS) $(INCLUDES_BONUS) $(OBJS_BONUS) $(LIBFT) $(MLX_FLAGS) $(MATH_FLAGS) -o $(NAME_BONUS)
+	make -C $(MLX_DIR)
+	$(CC) $(CFLAGS) $(INCLUDES_BONUS) $(OBJS_BONUS) $(LIBFT) $(MLX_FLAGS) -o $(NAME_BONUS)
 
 srcs/%.o: srcs/%.c
 	$(CC) $(CFLAGS) $(INCLUDES) -c $< -o $@
@@ -90,6 +97,7 @@ bonus/srcs/%.o: bonus/srcs/%.c
 clean:
 	rm -f $(OBJS) $(OBJS_BONUS)
 	make -C $(LIBFT_DIR) clean
+	make -C $(MLX_DIR) clean
 
 fclean: clean
 	rm -f $(NAME) $(NAME_BONUS)

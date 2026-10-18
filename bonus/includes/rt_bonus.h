@@ -49,6 +49,7 @@ t_coor	get_cylinder_normal(t_cylinder *cy, t_coor hit_point, t_ray *ray);
 /* mlx.c */
 void	my_mlx_pixel_put(t_data *data, int x, int y, int color);
 int		expose_hook(t_data *data);
+int		mlx_destroy_display(void *mlx_ptr);
 
 /* sphere.c */
 double	hit_sphere(t_sphere *sphere, t_ray *ray);

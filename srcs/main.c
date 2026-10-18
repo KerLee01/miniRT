@@ -21,7 +21,7 @@ int	close_window(t_data *data)
 		mlx_destroy_image(data->mlx, data->img);
 	if (data->win)
 		mlx_destroy_window(data->mlx, data->win);
-	if(data->mlx)
+	if (data->mlx)
 	{
 		mlx_destroy_display(data->mlx);
 		free(data->mlx);
@@ -32,7 +32,7 @@ int	close_window(t_data *data)
 
 int	key_hook(int keycode, t_data *data)
 {
-	if (keycode == 53)
+	if (keycode == 53 || keycode == 65307)
 		close_window(data);
 	return (0);
 }
